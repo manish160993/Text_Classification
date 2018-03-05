@@ -22,9 +22,12 @@ public class main{
 			Constant.ham=scan.nextLine().trim(); 
 			Constant.spam=scan.nextLine().trim();
 			String y=scan.nextLine().trim();
-			Constant.test="C:/Users/manis/Desktop/Study/2nd_sem/ML/Assign 2/enron4/train/"+y;
+			String y1=scan.nextLine().trim();
+			Constant.test="C:/Users/manis/Desktop/Github/Text_Classification/Naive/dataset1/test/"+y;
+			Constant.test1="C:/Users/manis/Desktop/Github/Text_Classification/Naive/dataset1/test/"+y1;
 			Import im=new Import();
-			
+			double accuracy=0;
+			double accuracy1[]=new double[2];
 			
 			
 			ham=im.importWordCount(Constant.ham); //HashMap with Ham words and their count
@@ -45,12 +48,19 @@ public class main{
 			ansHam=im.calculateConditional(vocab,ham);
 			HashMap<String,Double> ansSpam=new HashMap<String,Double>();
 			ansSpam=im.calculateConditional(vocab,spam);
+			
+			//System.out.println(ansHam+" "+ansSpam);
+			
+			
+			for(int j=0;j<2;j++){
+			File folder;
+				if(j==0)
+					folder = new File(Constant.test);
+				else
+					folder = new File(Constant.test1);
+			File[] listOfFiles = folder.listFiles();
 			int total=0;
 			int totalDocs=0;
-			//System.out.println(ansHam+" "+ansSpam);
-			File folder = new File(Constant.test);
-			File[] listOfFiles = folder.listFiles();
-			double accuracy=0;
 			for (File file : listOfFiles) {
 			if (file.isFile()) {
 			HashMap<String,Double> testHam=new HashMap<String,Double>();
@@ -86,14 +96,19 @@ public class main{
 				total++;
 			}
 			
-			if(y.equals("spam"))
-				accuracy=(double)(totalDocs-total)/totalDocs;
+			
+			
+			}
+			
+			if(j==0)
+				accuracy1[j]=((double)total/totalDocs)*100;
 			else
-				accuracy=((double)total/totalDocs);
+				accuracy1[j]=(double)(totalDocs-total)/totalDocs*100;
 			}
 			
 			
-			System.out.println(accuracy);
+			
+			System.out.println("ham : "+accuracy1[0]+" spam : "+accuracy1[1]+" total : "+(accuracy1[0]+accuracy1[1])/2);
 			
 		}
 		catch(Exception e){
